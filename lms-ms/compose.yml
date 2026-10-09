@@ -1,0 +1,54 @@
+name: lms-prod
+
+services:
+  postgres-lms:
+    image: postgres:16-alpine
+    container_name: postgres-lms
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    volumes:
+      - lms_data:/var/lib/postgresql/data
+    ports:
+      - "25432:5432"
+    networks:
+      - lms-int
+
+  lms-ms:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      postgres-lms:
+        condition: service_healthy
+    #ports:
+    #  - "28080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
+      CONFIG_SERVER_URL: ${CONFIG_SERVER_URL}
+      DB_HOST: postgres-lms
+      DB_PORT: 5432
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASS: ${DB_PASS}
+    volumes:
+      - ./logs:/app/logs
+    networks:
+      - lms-int
+      - prod-net
+
+volumes:
+  lms_data:
+
+networks:
+  lms-int:
+    name: lms-int
+  prod-net:
+    external: true

@@ -1,0 +1,54 @@
+name: ingresos-pagos-prod
+
+services:
+  postgres-ingresos-pagos:
+    image: postgres:16-alpine
+    container_name: postgres-ingresos-pagos
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    volumes:
+      - ingresos_pagos_data:/var/lib/postgresql/data
+    ports:
+      - "25433:5432"
+    networks:
+      - ingresos-pagos-int
+
+  ingresos-pagos-ms:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      postgres-ingresos-pagos:
+        condition: service_healthy
+    #ports:
+    #  - "28082:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
+      CONFIG_SERVER_URL: ${CONFIG_SERVER_URL}
+      DB_HOST: postgres-ingresos-pagos
+      DB_PORT: 5432
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASS: ${DB_PASS}
+    volumes:
+      - ./logs:/app/logs
+    networks:
+      - ingresos-pagos-int
+      - prod-net
+
+volumes:
+  ingresos_pagos_data:
+
+networks:
+  ingresos-pagos-int:
+    name: ingresos-pagos-int
+  prod-net:
+    external: true

@@ -1,0 +1,18 @@
+name: lms-dev
+
+services:
+  postgres-lms-dev:
+    image: postgres:16-alpine
+    container_name: postgres-lms-dev
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: lms_db
+      POSTGRES_USER: lms
+      POSTGRES_PASSWORD: lms
+    ports:
+      - "15432:5432"
+    volumes:
+      - lms_dev_data:/var/lib/postgresql/data
+
+volumes:
+  lms_dev_data:
