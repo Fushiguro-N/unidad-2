@@ -1,0 +1,55 @@
+server:
+  port: 8080
+
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://auth-ms:8080/.well-known/jwks.json
+  cloud:
+    gateway:
+      server:
+        webmvc:
+          routes:
+            - id: lms-cursos
+              uri: lb://lms-ms
+              predicates:
+                - Path=/api/v1/cursos/**
+            - id: lms-contenidos
+              uri: lb://lms-ms
+              predicates:
+                - Path=/api/v1/contenidos/**
+            - id: lms-matriculas
+              uri: lb://lms-ms
+              predicates:
+                - Path=/api/v1/matriculas/**
+            - id: ingresos-pagos-estudiantes
+              uri: lb://ingresos-pagos-ms
+              predicates:
+                - Path=/api/v1/estudiantes/**
+            - id: ingresos-pagos-pagos
+              uri: lb://ingresos-pagos-ms
+              predicates:
+                - Path=/api/v1/pagos/**
+
+            - id: auth-login
+              uri: lb://auth-ms
+              predicates:
+                - Path=/api/v1/auth/**
+
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${random.value}
+  client:
+    service-url:
+      defaultZone: http://eureka:8761/eureka
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: never

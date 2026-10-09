@@ -1,0 +1,17 @@
+name: eventos-py
+
+services:
+  eventos-py:
+    build: .
+    container_name: eventos-py
+    volumes:
+      - ./app:/app
+    working_dir: /app
+    command: sleep infinity
+    networks:
+      - kafka-dev-net
+
+networks:
+  kafka-dev-net:
+    external: true
+    name: kafka-dev-net
