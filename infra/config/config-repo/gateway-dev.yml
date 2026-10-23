@@ -6,7 +6,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          jwk-set-uri: http://localhost:8085/.well-known/jwks.json
+          issuer-uri: http://localhost:18180/realms/hooa
   cloud:
     gateway:
       server:
@@ -54,3 +54,6 @@ management:
   endpoint:
     health:
       show-details: always
+hooa:
+  cors:
+    allowed-origins: http://localhost:4200

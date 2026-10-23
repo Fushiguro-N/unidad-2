@@ -11,9 +11,17 @@ Microservicios de negocio del proyecto. Cada carpeta es un proyecto Spring Boot 
 
 | Carpeta | Qué es | Puerto DEV (app) | Base de datos DEV |
 |---|---|---|---|
-| `lms-ms/` | Experiencia de aprendizaje: cursos, contenidos y matrículas. Valida por Feign + Circuit Breaker el estado de cuenta en `ingresos-pagos-ms` antes de confirmar una matrícula. | `8080` (2.ª instancia: `8081`) | `lms_db` en `15432` |
+| `lms-ms/` | Experiencia de aprendizaje: cursos, contenidos y matrículas. Valida por Feign + Circuit Breaker el estado de cuenta en `ingresos-pagos-ms` antes de confirmar una matrícula. | `8081` (2.ª instancia: `8084`) | `lms_db` en `15432` |
 | `ingresos-pagos-ms/` | Finanzas: estado de cuenta del estudiante y pagos. Consume `matricula.creada` y publica `pago.validado`. | `8082` (2.ª instancia: `8083`) | `ingresos_pagos_db` en `15433` |
 | `auth-ms/` | Autenticación y emisión de JWT (temporal, luego Keycloak). | `8085` | `auth_db` en `15431` |
+
+## Cambios de S11
+
+- `lms-ms` e `ingresos-pagos-ms` usan Spring Boot 4.1.1 / Spring Cloud 2025.1.3.
+- `idEstudiante` es `String` (el claim `sub` del token de Keycloak): migraciones `V4` en `lms-ms` y `V3` en `ingresos-pagos-ms`.
+- `lms-ms` toma al estudiante de `jwt.getSubject()` y corre en `8081` en DEV.
+- Nuevo `GET /api/v1/pagos/por-matricula/{id}` en `ingresos-pagos-ms` (404 si no hay pago).
+- Detalle completo en [S11](../docs/sesiones/S11_Integracion_Keycloak_Frontend_Cambios.md).
 
 ## Ejecutar en DEV
 
@@ -27,13 +35,13 @@ docker compose -f compose-dev.yml up -d
 .\mvnw.cmd spring-boot:run
 ```
 
-Swagger: `http://localhost:8080/swagger-ui.html`. Health: `http://localhost:8080/actuator/health`.
+Swagger: `http://localhost:8081/swagger-ui.html`. Health: `http://localhost:8081/actuator/health`.
 
 Segunda instancia, en otra terminal (puerto fijo, no aleatorio):
 
 ```powershell
 cd services/lms-ms
-.\mvnw.cmd spring-boot:run "-Dspring-boot.run.arguments=--server.port=8081"
+.\mvnw.cmd spring-boot:run "-Dspring-boot.run.arguments=--server.port=8084"
 ```
 
 ### `ingresos-pagos-ms`

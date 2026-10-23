@@ -20,3 +20,21 @@ scrape_configs:
         labels:
           application: ingresos-pagos-ms
           __path__: /var/log/ingresos-pagos-ms/*.log
+  - job_name: auth-ms
+    static_configs:
+      - targets: [localhost]
+        labels:
+          application: auth-ms
+          __path__: /var/log/auth-ms/*.log
+  - job_name: hooa-keycloak
+    static_configs:
+      - targets: [localhost]
+        labels:
+          application: hooa-keycloak
+          __path__: /var/log/hooa-keycloak/*.log
+  - job_name: gateway
+    static_configs:
+      - targets: [localhost]
+        labels:
+          application: gateway
+          __path__: /var/log/gateway/*.log

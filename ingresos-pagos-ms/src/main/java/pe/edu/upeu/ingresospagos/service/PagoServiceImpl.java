@@ -18,6 +18,7 @@ import pe.edu.upeu.ingresospagos.repository.PagoRepository;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -67,6 +68,11 @@ public class PagoServiceImpl implements PagoService {
     @Override
     public PagoResponse obtener(Long id) {
         return pagoMapper.toResponse(buscarOFallar(id));
+    }
+
+    @Override
+    public Optional<PagoResponse> buscarPorMatricula(Long matriculaId) {
+        return pagoRepository.findByMatriculaId(matriculaId).map(pagoMapper::toResponse);
     }
 
     private Pago buscarOFallar(Long id) {

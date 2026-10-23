@@ -54,11 +54,13 @@ grafana-dev
   `compose-dev.yml`. **No** hay descubrimiento automático — agregar un
   microservicio nuevo requiere una entrada nueva en ambos archivos.
 
-  **Estado actual:** solo `lms-ms` e `ingresos-pagos-ms` están
-  cableados. `auth-ms` (S7) **no** aparece en Loki/Grafana todavía —
-  quedó pendiente desde antes de esta sesión. Para agregarlo: un volumen más en `promtail`
-  (`compose-dev.yml`) y un `job_name` más en `promtail-config-dev.yml`, con
-  el mismo patrón que los dos que ya existen.
+  **Estado actual (S11):** `lms-ms`, `ingresos-pagos-ms` y `auth-ms` están
+  cableados en DEV y PROD; en DEV también `gateway` (`infra/gateway/logs`) y
+  Keycloak (`keycloak/logs`). Prometheus además raspa las métricas de
+  Keycloak (`host.docker.internal:19000/metrics`). Para agregar otro
+  servicio: un volumen más en `promtail` (`compose-dev.yml`) y un
+  `job_name` más en `promtail-config-dev.yml`, con el mismo patrón que los
+  que ya existen.
 
 ## Verificar
 

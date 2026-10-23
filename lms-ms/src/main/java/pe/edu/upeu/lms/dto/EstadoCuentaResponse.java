@@ -8,6 +8,6 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EstadoCuentaResponse {
-    private Long idEstudiante;
+    private String idEstudiante;
     private Boolean tieneDeudaPendiente;
 }

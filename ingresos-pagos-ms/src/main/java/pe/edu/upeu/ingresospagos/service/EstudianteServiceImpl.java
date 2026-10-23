@@ -15,7 +15,7 @@ public class EstudianteServiceImpl implements EstudianteService {
 
     @Override
     @Transactional(readOnly = true)
-    public EstadoCuentaResponse obtenerEstadoCuenta(Long idEstudiante) {
+    public EstadoCuentaResponse obtenerEstadoCuenta(String idEstudiante) {
         boolean tieneDeudaPendiente = !pagoRepository
                 .findByIdEstudianteAndEstadoNot(idEstudiante, EstadoPago.VALIDADO)
                 .isEmpty();

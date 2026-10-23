@@ -1,12 +1,12 @@
 server:
-  port: 8080
+  port: 8081
 
 spring:
   security:
     oauth2:
       resourceserver:
         jwt:
-          jwk-set-uri: http://localhost:8085/.well-known/jwks.json
+          issuer-uri: http://localhost:18180/realms/hooa
   datasource:
     url: jdbc:postgresql://localhost:15432/lms_db
     username: lms
@@ -67,6 +67,13 @@ management:
   endpoint:
     health:
       show-details: always
+      probes:
+        enabled: true
+      group:
+        liveness:
+          include: livenessState
+        readiness:
+          include: readinessState, db
 
 eureka:
   instance:
@@ -84,3 +91,8 @@ resilience4j:
         failure-rate-threshold: 50
         wait-duration-in-open-state: 10s
         permitted-number-of-calls-in-half-open-state: 3
+
+hooa:
+  cors:
+    enabled: false
+    allowed-origins: http://localhost:4200

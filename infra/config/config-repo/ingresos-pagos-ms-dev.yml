@@ -6,7 +6,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          jwk-set-uri: http://localhost:8085/.well-known/jwks.json
+          issuer-uri: http://localhost:18180/realms/hooa
   datasource:
     url: jdbc:postgresql://localhost:15433/ingresos_pagos_db
     username: ingresospagos
@@ -63,6 +63,13 @@ management:
   endpoint:
     health:
       show-details: always
+      probes:
+        enabled: true
+      group:
+        liveness:
+          include: livenessState
+        readiness:
+          include: readinessState, db
 
 eureka:
   instance:

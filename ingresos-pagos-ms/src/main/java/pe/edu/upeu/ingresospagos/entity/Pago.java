@@ -22,8 +22,8 @@ public class Pago {
     @Column(name = "matricula_id", nullable = false, unique = true)
     private Long matriculaId;
 
-    @Column(name = "id_estudiante")
-    private Long idEstudiante;
+    @Column(name = "id_estudiante", length = 36)
+    private String idEstudiante;
 
     @Column(nullable = false, precision = 12, scale = 2)
     private BigDecimal monto;

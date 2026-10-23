@@ -31,7 +31,7 @@ public class MatriculaServiceImpl implements MatriculaService {
 
     @Override
     @Transactional
-    public MatriculaResponse crear(MatriculaRequest request, Long idEstudiante) {
+    public MatriculaResponse crear(MatriculaRequest request, String idEstudiante) {
         Matricula matricula = Matricula.builder()
                 .idEstudiante(idEstudiante)
                 .periodoAcademico(request.getPeriodoAcademico())

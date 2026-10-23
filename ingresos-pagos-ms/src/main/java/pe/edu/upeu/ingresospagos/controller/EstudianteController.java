@@ -16,7 +16,7 @@ public class EstudianteController {
     private final EstudianteService estudianteService;
 
     @GetMapping("/{id}/estado-cuenta")
-    public EstadoCuentaResponse obtenerEstadoCuenta(@PathVariable("id") Long id) {
+    public EstadoCuentaResponse obtenerEstadoCuenta(@PathVariable("id") String id) {
         return estudianteService.obtenerEstadoCuenta(id);
     }
 }

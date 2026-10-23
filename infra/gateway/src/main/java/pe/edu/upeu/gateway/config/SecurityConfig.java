@@ -36,6 +36,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http,
                                                      JwtAuthenticationConverter jwtAuthenticationConverter) throws Exception {
         http
+                .cors(cors -> {})
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/auth/**").permitAll()
@@ -45,6 +46,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/api/v1/contenidos/**", "/api/v1/cursos/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/contenidos/**", "/api/v1/cursos/**").hasRole("ADMIN")
                         .requestMatchers("/api/v1/matriculas/**").hasAnyRole("CLIENTE", "ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/pagos").hasRole("ADMIN")
                         .requestMatchers("/api/v1/estudiantes/**", "/api/v1/pagos/**").hasAnyRole("CLIENTE", "ADMIN")
                         .anyRequest().authenticated()
                 )

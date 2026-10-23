@@ -25,8 +25,11 @@ services:
     restart: unless-stopped
     volumes:
       - ./promtail/promtail-config-dev.yml:/etc/promtail/config.yml:ro
-      - ../services/lms-ms/logs:/var/log/lms-ms:ro
-      - ../services/ingresos-pagos-ms/logs:/var/log/ingresos-pagos-ms:ro
+      - ../lms-ms/logs:/var/log/lms-ms:ro
+      - ../ingresos-pagos-ms/logs:/var/log/ingresos-pagos-ms:ro
+      - ../auth-ms/logs:/var/log/auth-ms:ro
+      - ../keycloak/logs:/var/log/hooa-keycloak:ro
+      - ../infra/gateway/logs:/var/log/gateway:ro
     command: -config.file=/etc/promtail/config.yml
     depends_on:
       - loki

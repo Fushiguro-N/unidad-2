@@ -9,5 +9,5 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface EstadoCuentaClient {
 
     @GetMapping("/api/v1/estudiantes/{id}/estado-cuenta")
-    EstadoCuentaResponse obtenerEstadoCuenta(@PathVariable("id") Long id);
+    EstadoCuentaResponse obtenerEstadoCuenta(@PathVariable("id") String id);
 }

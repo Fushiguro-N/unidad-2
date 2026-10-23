@@ -20,8 +20,8 @@ public class Matricula {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "id_estudiante")
-    private Long idEstudiante;
+    @Column(name = "id_estudiante", length = 36)
+    private String idEstudiante;
 
     @Column(name = "periodo_academico", length = 20)
     private String periodoAcademico;

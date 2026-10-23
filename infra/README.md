@@ -12,7 +12,7 @@ A diferencia de `services/`, ningún proyecto de `infra/` implementa lógica de 
 |---|---|---|
 | `config/` | Config Server (Spring Cloud Config) — entrega la configuración por ambiente (`dev`/`prod`) de cada componente por HTTP, leyendo `config-repo/`. | S2 |
 | `eureka/` | Eureka Server — registro y descubrimiento de servicios. | S3 |
-| `gateway/` | Spring Cloud Gateway (WebMVC) — punto único de acceso y balanceo de carga (`lb://`). Desde S7 valida el JWT de `auth-ms`. | S4 |
+| `gateway/` | Spring Cloud Gateway (WebMVC) — punto único de acceso y balanceo de carga (`lb://`). Valida el JWT de Keycloak (`issuer-uri` del realm `hooa`, S11), aplica roles y CORS (`hooa.cors.allowed-origins`) y escribe `logs/gateway.log`. | S4 |
 
 ## Tecnologías
 
@@ -83,6 +83,15 @@ Respuesta `200 OK` con `propertySources` vacío significa que el archivo `{app}-
 - `gateway-dev.yml` / `gateway-prod.yml`
 
 `config-repo` es una carpeta local versionada en este mismo repositorio (no un Git remoto separado, a diferencia del backend `git:` nativo de Spring Cloud Config) — como `pagatu` es público en GitHub, **no se comitean credenciales reales aquí**: los valores actuales son de prueba, para DEV/PROD local únicamente.
+
+## Cambios de S11 en `config-repo/`
+
+- `gateway`, `lms-ms` e `ingresos-pagos-ms` validan el JWT con `issuer-uri` (DEV `http://localhost:18180/realms/hooa`, PROD `http://hooa-keycloak:8080/realms/hooa`) en lugar de `jwk-set-uri`.
+- Probes de salud (`liveness`/`readiness` con base de datos) en `auth-ms`, `lms-ms` e `ingresos-pagos-ms` (DEV).
+- `lms-ms` corre en el puerto `8081` en DEV.
+- Si `eureka` falla con `Connection refused` a `localhost:18888`, arrancó antes que `config`: levanta `config` y espera a que responda.
+
+Detalle completo en [S11](../docs/sesiones/S11_Integracion_Keycloak_Frontend_Cambios.md).
 
 ## Producción local con Docker
 

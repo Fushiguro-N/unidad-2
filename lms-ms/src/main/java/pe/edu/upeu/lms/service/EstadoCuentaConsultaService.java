@@ -15,11 +15,11 @@ public class EstadoCuentaConsultaService {
     private final EstadoCuentaClient estadoCuentaClient;
 
     @CircuitBreaker(name = "ingresosPagos", fallbackMethod = "fallbackEstadoCuenta")
-    public EstadoCuentaResponse consultarEstadoCuenta(Long idEstudiante) {
+    public EstadoCuentaResponse consultarEstadoCuenta(String idEstudiante) {
         return estadoCuentaClient.obtenerEstadoCuenta(idEstudiante);
     }
 
-    public EstadoCuentaResponse fallbackEstadoCuenta(Long idEstudiante, Throwable ex) {
+    public EstadoCuentaResponse fallbackEstadoCuenta(String idEstudiante, Throwable ex) {
         log.warn("[INGRESOS-PAGOS] Fallback activado para idEstudiante {}. Motivo: {}", idEstudiante, ex.getMessage());
         return null;
     }

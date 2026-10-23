@@ -22,11 +22,8 @@ public class MatriculaController {
     @ResponseStatus(HttpStatus.CREATED)
     public MatriculaResponse enrolar(@Valid @RequestBody MatriculaRequest request,
                                       @AuthenticationPrincipal Jwt jwt) {
-        Number claimIdEstudiante = jwt.getClaim("idCliente");
-        if (claimIdEstudiante == null) {
-            throw new IllegalArgumentException("Token sin idCliente: solo un estudiante autenticado puede matricularse");
-        }
-        return matriculaService.crear(request, claimIdEstudiante.longValue());
+        String idEstudiante = jwt.getSubject();
+        return matriculaService.crear(request, idEstudiante);
     }
 
     @GetMapping

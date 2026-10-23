@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 public class MatriculaResponse {
     private Long id;
-    private Long idEstudiante;
+    private String idEstudiante;
     private String periodoAcademico;
     private LocalDateTime fechaCreacion;
     private String estado;

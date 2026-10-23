@@ -6,7 +6,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          jwk-set-uri: http://auth-ms:8080/.well-known/jwks.json
+          issuer-uri: http://hooa-keycloak:8080/realms/hooa
   cloud:
     gateway:
       server:
